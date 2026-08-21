@@ -1,1 +1,4 @@
-<template><div class="node"><Handle type="target" position="left"/><b>{{data.label}}</b><small>{{type}}</small><Handle type="source" position="right"/></div></template><script setup lang="ts">import{Handle,Position}from'@vue-flow/core';defineProps<{data:any,type:string}>()</script><style scoped>.node{min-width:100px;padding:10px;border:1px solid #526;background:#fff;border-radius:6px;display:grid;gap:4px}small{color:#667}</style>
+<template><div class="node"><Handle type="target" :position="Position.Left"/><b>{{data.label}}</b><small>{{type}}</small><Handle type="source" :position="Position.Right"/></div></template>
+<script setup lang="ts">import{Handle,Position}from'@vue-flow/core';defineProps<{data:any,type:string}>()
+</script>
+<style scoped>.node{min-width:100px;padding:10px;border:1px solid #526;background:#fff;border-radius:6px;display:grid;gap:4px}small{color:#667}</style>

@@ -1,1 +1,4 @@
-<template><aside><b>Nodes</b><button v-for="n in kinds" :key="n" draggable="true" @dragstart="drag(n)">{{n}}</button></aside></template><script setup lang="ts">const emit=defineEmits(['add']);const kinds=['start','llm','tool','condition','code','knowledge','join','end'];const drag=(n:string)=>emit('add',n)</script><style scoped>aside{width:150px;padding:12px;border-right:1px solid #ddd;display:grid;gap:8px}button{text-align:left}</style>
+<template><aside><b>Nodes</b><button v-for="n in kinds" :key="n" draggable="true" @dragstart="drag(n)">{{n}}</button></aside></template>
+<script setup lang="ts">const emit=defineEmits(['add']);const kinds=['start','llm','tool','condition','code','knowledge','join','end'];const drag=(n:string)=>emit('add',n)
+</script>
+<style scoped>aside{width:150px;padding:12px;border-right:1px solid #ddd;display:grid;gap:8px}button{text-align:left}</style>
