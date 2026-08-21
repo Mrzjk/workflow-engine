@@ -1,1 +1,0 @@
-<template><el-table :data="s.agents"><el-table-column prop="name" label="Agent"/><el-table-column prop="description" label="Description"/></el-table></template><script setup lang="ts">import{onMounted}from'vue';import{useAgentStore}from'../stores/agent';const s=useAgentStore();onMounted(s.load)</script>

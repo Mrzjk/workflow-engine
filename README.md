@@ -62,7 +62,7 @@ The canvas never schedules work itself. It describes directed dependencies. `Wor
 
 | Path | Responsibility |
 | --- | --- |
-| `backend/app/api` | HTTP routes for auth, agents, workflows, runs, tools, models and health. |
+| `backend/app/api` | HTTP routes for auth, workflows, runs, tools, models and health. |
 | `backend/app/core` | Settings, constants, structured logging and sensitive-value redaction. |
 | `backend/app/db` | Async SQLAlchemy engine, declarative base and persistence entities. |
 | `backend/app/schemas` | Pydantic v2 request, response and Workflow DSL contracts. |
@@ -120,7 +120,6 @@ The validator checks start/end presence, IDs, node types, edge references, condi
 | Area | Endpoints |
 | --- | --- |
 | Auth | `POST /api/auth/register`, `POST /api/auth/login` |
-| Agents | `POST /api/agents`, `GET /api/agents`, `GET /api/agents/{id}` |
 | Workflows | create, fetch, validate, run, stream, list versions and publish under `/api/workflows` |
 | Runs | `GET /api/runs/{run_id}`, `GET /api/runs/{run_id}/nodes` |
 | Catalogs | `GET /api/tools`, `GET /api/models` |

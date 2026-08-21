@@ -58,7 +58,7 @@ FastAPI API -> Service -> Repository -> MySQL
 
 | 路径 | 职责 |
 | --- | --- |
-| `backend/app/api` | 认证、Agent、Workflow、Run、Tool、Model、健康检查 API。 |
+| `backend/app/api` | 认证、Workflow、Run、Tool、Model、健康检查 API。 |
 | `backend/app/core` | 配置、常量、结构化日志与敏感字段脱敏。 |
 | `backend/app/db` | SQLAlchemy 异步连接、基础模型和数据库实体。 |
 | `backend/app/schemas` | Pydantic v2 请求/响应及 Workflow DSL 数据契约。 |
@@ -115,7 +115,6 @@ Validator 会在编译前检查 Start/End、节点 ID、节点类型、边引用
 | 分类 | 主要接口 |
 | --- | --- |
 | 认证 | `POST /api/auth/register`、`POST /api/auth/login` |
-| Agent | `POST /api/agents`、`GET /api/agents`、`GET /api/agents/{id}` |
 | Workflow | 创建、读取、校验、运行、SSE、版本和发布接口位于 `/api/workflows` |
 | Run | `GET /api/runs/{run_id}`、`GET /api/runs/{run_id}/nodes` |
 | 目录 | `GET /api/tools`、`GET /api/models` |
