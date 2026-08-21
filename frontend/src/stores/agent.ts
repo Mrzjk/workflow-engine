@@ -1,0 +1,1 @@
+import {defineStore} from 'pinia'; import {ref} from 'vue'; import {api} from '../api/client'; export const useAgentStore=defineStore('agents',()=>{const agents=ref<any[]>([]);const load=async()=>agents.value=(await api.get('/api/agents')).data;return{agents,load}})

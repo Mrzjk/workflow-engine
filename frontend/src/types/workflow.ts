@@ -1,0 +1,1 @@
+export type NodeType='start'|'llm'|'tool'|'condition'|'code'|'knowledge'|'join'|'end'; export interface WorkflowNode {id:string;type:NodeType;position:{x:number;y:number};data:{label:string;config:Record<string,unknown>}}; export interface WorkflowEdge{id:string;source:string;target:string}
