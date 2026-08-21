@@ -164,6 +164,16 @@ cd ../frontend && npm install
 
 Run infrastructure with `docker compose up mysql redis`; apply schema with `cd backend && uv run alembic upgrade head`. Development commands are `uv run uvicorn app.main:app --reload` and `npm run dev`.
 
+### Start Frontend and Backend
+
+After completing the setup above, run this command from the repository root in PowerShell. It opens the backend in a separate terminal window and starts the frontend in the current terminal:
+
+```powershell
+Start-Process powershell -ArgumentList '-NoExit', '-Command', 'Set-Location backend; uv run uvicorn app.main:app --reload'; Set-Location frontend; npm run dev
+```
+
+The frontend is available at `http://localhost:5173` and the API at `http://localhost:8000`.
+
 ## Configuration
 
 `.env.example` documents `DATABASE_URL`, `REDIS_URL`, model provider keys/base URLs and default model selection. Never commit real API keys.
