@@ -163,6 +163,16 @@ cd ../frontend && npm install
 
 后端开发：`uv run uvicorn app.main:app --reload`；前端开发：`npm run dev`。
 
+### 前后端一键启动
+
+完成上述安装后，在项目根目录的 PowerShell 中执行以下命令。命令会在新终端窗口启动后端，并在当前终端启动前端：
+
+```powershell
+Start-Process powershell -ArgumentList '-NoExit', '-Command', 'Set-Location backend; uv run uvicorn app.main:app --reload'; Set-Location frontend; npm run dev
+```
+
+前端地址为 `http://localhost:5173`，后端 API 地址为 `http://localhost:8000`。
+
 ## 扩展开发
 
 - 新节点：继承 `BaseNode`，使用 `register_node()` 注册。
