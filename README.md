@@ -1,8 +1,8 @@
-# Agent Workflow Canvas
+# Workflow Studio
 
 [简体中文](README-zh.md)
 
-Agent Workflow Canvas is a full-stack foundation for building visual, Coze-style AI workflows. It keeps the domain boundary explicit: an **Agent** is the application container; a **Workflow** is the versioned graph owned by an Agent; canvas nodes are only execution steps. There is intentionally no `AgentNode` or `SubAgentNode`.
+Workflow Studio is a full-stack foundation for visual, code-first AI workflow orchestration. **Workflow is the first-class execution abstraction**; an Agent is only an optional application form backed by a Workflow. There is intentionally no `AgentNode` or `SubAgentNode`.
 
 ## What It Provides
 

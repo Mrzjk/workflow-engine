@@ -1,8 +1,8 @@
-# Agent Workflow Canvas
+# Workflow Studio
 
 [English](README.md)
 
-Agent Workflow Canvas 是一个用于构建 Coze 风格可视化 AI 工作流的全栈项目基础。它严格区分领域概念：**Agent 是 AI 应用实体**，Agent 拥有 Workflow；**Workflow 是可版本化的执行图**；画布中的节点只是执行步骤。因此项目中不会有 `AgentNode` 或 `SubAgentNode`。
+Workflow Studio 是一个用于构建 Coze 风格可视化、代码化 AI 工作流的全栈项目基础。**Workflow 是第一公民，也是顶层执行抽象**；Agent 仅是由 Workflow 驱动的一种应用形态；画布节点只是 Workflow 中的执行步骤。因此项目中不会有 `AgentNode` 或 `SubAgentNode`。
 
 ## 项目能力
 

@@ -13,7 +13,7 @@ class Agent(Timestamped):
 class User(Timestamped):
     __tablename__="users"; id: Mapped[str]=mapped_column(String(36),primary_key=True,default=uid); email: Mapped[str]=mapped_column(String(255),unique=True); password_hash: Mapped[str]=mapped_column(String(255)); role: Mapped[str]=mapped_column(String(32),default="user")
 class Workflow(Timestamped):
-    __tablename__="workflows"; id: Mapped[str]=mapped_column(String(36),primary_key=True,default=uid); agent_id: Mapped[str]=mapped_column(ForeignKey("agents.id")); owner_id: Mapped[str|None]=mapped_column(ForeignKey("users.id")); name: Mapped[str]=mapped_column(String(255)); description: Mapped[str|None]=mapped_column(Text); visibility: Mapped[str]=mapped_column(String(32),default="private"); review_status: Mapped[str]=mapped_column(String(32),default="draft")
+    __tablename__="workflows"; id: Mapped[str]=mapped_column(String(36),primary_key=True,default=uid); agent_id: Mapped[str|None]=mapped_column(ForeignKey("agents.id")); owner_id: Mapped[str|None]=mapped_column(ForeignKey("users.id")); name: Mapped[str]=mapped_column(String(255)); description: Mapped[str|None]=mapped_column(Text); visibility: Mapped[str]=mapped_column(String(32),default="private"); review_status: Mapped[str]=mapped_column(String(32),default="draft")
 class WorkflowVersion(Base):
     __tablename__="workflow_versions"; id: Mapped[str]=mapped_column(String(36),primary_key=True,default=uid); workflow_id: Mapped[str]=mapped_column(ForeignKey("workflows.id")); version: Mapped[int]=mapped_column(Integer); status: Mapped[str]=mapped_column(String(32),default="draft"); graph_json: Mapped[dict]=mapped_column(JSON); created_at: Mapped[datetime]=mapped_column(DateTime,default=datetime.utcnow)
 class Tool(Timestamped):

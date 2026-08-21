@@ -7,7 +7,12 @@ from app.repositories.workflow import WorkflowRepository
 from app.schemas.workflow import WorkflowCreate,WorkflowSchema
 from app.schemas.run import RunCreate
 from app.runtime.streaming import event_stream
+from app.workflow.dsl import WorkflowMapper
+from app.python.generator import PythonWorkflowGenerator
+from app.python.parser import PythonWorkflowParser, PythonParseError
+from pydantic import BaseModel
 router=APIRouter(prefix="/api/workflows",tags=["workflows"])
+class PythonSource(BaseModel): source: str
 @router.post("")
 async def create(data:WorkflowCreate,s:AsyncSession=Depends(get_session)): return await WorkflowService(s).create(data)
 @router.get("/{id}")
@@ -31,3 +36,17 @@ async def stream(id:str,run_id:str):
 async def versions(id:str,s:AsyncSession=Depends(get_session)): return await WorkflowRepository(s).versions(id)
 @router.post("/{id}/publish")
 async def publish(id:str,s:AsyncSession=Depends(get_session)): return await WorkflowRepository(s).publish(id)
+@router.get("/{id}/export")
+async def export_json(id:str,s:AsyncSession=Depends(get_session)):
+    v=await WorkflowRepository(s).latest(id)
+    if not v: raise HTTPException(404,"workflow not found")
+    return v.graph_json
+@router.get("/{id}/export/python")
+async def export_python(id:str,s:AsyncSession=Depends(get_session)):
+    v=await WorkflowRepository(s).latest(id)
+    if not v: raise HTTPException(404,"workflow not found")
+    return {"source":PythonWorkflowGenerator().generate(WorkflowMapper.to_ir(WorkflowSchema.model_validate(v.graph_json)))}
+@router.post("/import/python")
+async def import_python(data:PythonSource):
+    try: return WorkflowMapper.to_dsl(PythonWorkflowParser().parse(data.source))
+    except PythonParseError as error: raise HTTPException(422,{"code":"UNSUPPORTED_PYTHON_SYNTAX","message":str(error),"details":{}})
