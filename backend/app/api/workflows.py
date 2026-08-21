@@ -10,6 +10,7 @@ from app.runtime.streaming import event_stream
 from app.workflow.dsl import WorkflowMapper
 from app.python.generator import PythonWorkflowGenerator
 from app.python.parser import PythonWorkflowParser, PythonParseError
+from app.repositories.run import RunRepository
 from pydantic import BaseModel
 router=APIRouter(prefix="/api/workflows",tags=["workflows"])
 class PythonSource(BaseModel): source: str
@@ -26,7 +27,7 @@ async def validate(id:str,s:AsyncSession=Depends(get_session)): return await Wor
 async def run(id:str,data:RunCreate,s:AsyncSession=Depends(get_session)):
     v=await WorkflowRepository(s).latest(id)
     if not v: raise HTTPException(404,"workflow not found")
-    run_id,result=await RunService.executor.run(WorkflowSchema.model_validate(v.graph_json),data.input); return {"run_id":run_id,"result":result}
+    run,trace,result=await RunService(s).run(id,v,WorkflowSchema.model_validate(v.graph_json),data.input); return {"run_id":run.id,"trace_id":trace.id,"result":result}
 @router.get("/{id}/runs/{run_id}/stream")
 async def stream(id:str,run_id:str):
     bus=RunService.executor.runs.get(run_id)
@@ -36,6 +37,8 @@ async def stream(id:str,run_id:str):
 async def versions(id:str,s:AsyncSession=Depends(get_session)): return await WorkflowRepository(s).versions(id)
 @router.post("/{id}/publish")
 async def publish(id:str,s:AsyncSession=Depends(get_session)): return await WorkflowRepository(s).publish(id)
+@router.get("/{id}/traces")
+async def traces(id:str,s:AsyncSession=Depends(get_session)): return await RunRepository(s).traces(id)
 @router.get("/{id}/export")
 async def export_json(id:str,s:AsyncSession=Depends(get_session)):
     v=await WorkflowRepository(s).latest(id)

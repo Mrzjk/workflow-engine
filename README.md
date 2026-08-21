@@ -12,6 +12,7 @@ Workflow Studio is a full-stack foundation for visual, code-first AI workflow or
 - LangGraph compilation for graph dependencies, including static fan-out and fan-in; `Join(mode="all")` is the convergence node.
 - LangChain-based LLM and Tool abstractions with provider and registry extension points.
 - Runtime event model and SSE endpoint for execution timelines and streamed LLM events.
+- Persistent LangSmith-style execution traces: `Workflow -> WorkflowRun -> WorkflowTrace -> TraceSpan`.
 - Initial account/login data model and APIs, plus workflow visibility and review-status fields for private workflows, publishing and a future moderated public gallery.
 
 ## Architecture
@@ -125,6 +126,20 @@ The validator checks start/end presence, IDs, node types, edge references, condi
 | Catalogs | `GET /api/tools`, `GET /api/models` |
 
 The stream route is `GET /api/workflows/{workflow_id}/runs/{run_id}/stream`. Events include workflow, node, LLM, tool, condition and join lifecycle messages.
+
+## Execution Traces
+
+Every execution creates one `WorkflowRun` and one root `WorkflowTrace`. Each node execution produces a `TraceSpan` and matching `NodeRun`. A span stores a safe workflow-state snapshot used as node input, node output, status, error, start/end timestamps and duration. This makes the relationship explicit and queryable:
+
+```text
+Workflow (1) -> WorkflowVersion (N)
+Workflow (1) -> WorkflowRun (N)
+WorkflowRun (1) -> WorkflowTrace (1)
+WorkflowTrace (1) -> TraceSpan (N)
+WorkflowRun (1) -> NodeRun (N)
+```
+
+Use `GET /api/workflows/{workflow_id}/traces` for historical traces and `GET /api/runs/traces/{trace_id}` for a root trace plus its ordered node spans. The Canvas Debug Panel loads spans after the run completes.
 
 ## Accounts, Publishing and Gallery
 

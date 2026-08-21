@@ -2,11 +2,12 @@ from app.runtime.state import AgentState
 from app.nodes.registry import NODE_REGISTRY
 class WorkflowCompileError(ValueError): pass
 class WorkflowCompiler:
-    def compile(self, workflow):
+    def compile(self, workflow, trace_recorder=None):
         try:
             from langgraph.graph import StateGraph, START, END
             builder=StateGraph(AgentState)
-            for n in workflow.nodes: builder.add_node(n.id, NODE_REGISTRY[n.type](n.id,n.config).run)
+            for n in workflow.nodes:
+                node=NODE_REGISTRY[n.type](n.id,n.config); node.trace_recorder=trace_recorder; builder.add_node(n.id,node.run)
             conditional_sources={n.id for n in workflow.nodes if n.type=="condition"}
             for e in workflow.edges:
                 if e.source not in conditional_sources:

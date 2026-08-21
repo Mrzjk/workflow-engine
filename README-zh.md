@@ -12,6 +12,7 @@ Workflow Studio 是一个用于构建 Coze 风格可视化、代码化 AI 工作
 - 使用 LangGraph 将 DSL 编译为依赖图，实现静态 Fan-out / Fan-in；`Join(mode="all")` 是汇聚节点。
 - 使用 LangChain 抽象 LLM 和 Tool，并提供工厂与注册表扩展点。
 - 运行时事件、SSE 流式接口和前端调试时间线。
+- 持久化的 LangSmith 风格执行轨迹：`Workflow -> WorkflowRun -> WorkflowTrace -> TraceSpan`。
 - 初始登录/注册、工作流可见性与审核状态数据模型，为“我的 Workflows”“Workflow 广场”“发布审核”提供基础。
 
 ## 架构
@@ -120,6 +121,20 @@ Validator 会在编译前检查 Start/End、节点 ID、节点类型、边引用
 | 目录 | `GET /api/tools`、`GET /api/models` |
 
 SSE 地址为 `GET /api/workflows/{workflow_id}/runs/{run_id}/stream`，事件包含工作流、节点、LLM、Tool、Condition 与 Join 生命周期。
+
+## 执行轨迹
+
+每次执行都会创建一个 `WorkflowRun` 和一个根 `WorkflowTrace`。每个节点执行生成一个 `TraceSpan`，同时保存相应的 `NodeRun`。Span 保存节点输入的安全状态快照、节点输出、状态、错误、开始/结束时间与耗时，关系如下：
+
+```text
+Workflow (1) -> WorkflowVersion (N)
+Workflow (1) -> WorkflowRun (N)
+WorkflowRun (1) -> WorkflowTrace (1)
+WorkflowTrace (1) -> TraceSpan (N)
+WorkflowRun (1) -> NodeRun (N)
+```
+
+通过 `GET /api/workflows/{workflow_id}/traces` 查询某个 Workflow 的历史轨迹；通过 `GET /api/runs/traces/{trace_id}` 获取根轨迹和按时间排序的节点 Span。Canvas 的 Debug Panel 在执行完成后自动加载这些记录。
 
 ## 登录、发布与 Workflow 广场
 
